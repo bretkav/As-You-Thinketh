@@ -1,91 +1,222 @@
 # The script of the game goes in this file.
 
-# default name should be 'youthful reader'
+# this block activates auto-play on dialogue for all characters except the player.
 
-# Declare characters used by this game. The color argument colorizes the
+default _is_voiced = False
+
+init python:
+    preferences.afm_enable = True
+    preferences.afm_time = 15  # default display time for unvoiced lines
+
+    def v(filename):
+        store._is_voiced = True
+        renpy.music.play(filename, channel="voice")
+
+    def auto_afm_time():
+        if store._is_voiced:
+            preferences.afm_time = 0.1
+            store._is_voiced = False
+        else:
+            preferences.afm_time = 15
+
+    config.start_interact_callbacks.append(auto_afm_time)
+
+    def u_afm_callback(event, **kwargs):
+        if event == "begin":
+            preferences.afm_enable = False
+        elif event == "end":
+            preferences.afm_enable = True
+
+    u = Character("[playername]", color="#3be4f0", callback=u_afm_callback, window_style="player_window")
+
+# defining styles
+
+style subtitle_window:
+    background None
+    xfill True
+    yalign 0.98
+    padding (40, 20)
+
+style subtitle_namebox:
+    background None
+    xalign 0.5
+    yanchor 1.0
+    ypos 0
+
+style subtitle_name:
+    color "#FFFFFF"
+    outlines []
+    italic True
+    textalign 0.5
+
+style subtitle_text:
+    color "#FFE800"
+    outlines [(3, "#000000", 0, 0)]
+    textalign 0.5
+    xalign 0.5
+
+style player_window:
+    xalign 0.5
+    xfill True
+    yalign gui.textbox_yalign
+    ysize gui.textbox_height
+    background Image("gui/textbox.png", xalign=0.5, yalign=1.0)
+
+# Declare NPCs in this game. The color argument colorizes the
 # name of the character.
 
-define j = Character("James", color="#E03B8B")
-define u = Character("[playername]", color="#3be4f0")
-define p = Character("The Poet" color="##f07a3b")
+default playername = "Youthful Reader"
+default player_appearance = "option_femme"
+
+define j = Character("James",
+    window_style="subtitle_window",
+    what_style="subtitle_text",
+    namebox_style="subtitle_namebox",
+    who_style="subtitle_name"
+)
+
+define p = Character("The Poet",
+    window_style="subtitle_window",
+    what_style="subtitle_text",
+    namebox_style="subtitle_namebox",
+    who_style="subtitle_name"
+)
 
 # The game starts here.
 
 label start:
+    $ preferences.afm_enable = True
+    $ preferences.afm_time = 15
+
+    "You are dreaming."
 
     scene bg cafe
-    with fade
     show james standing at center
+    with fade
 
+    "You know that none of this is real, but this cafe and this man seem so familiar..."
+    voice "audio/jamesaudio/james_1.mp3"
     j "You yourself are a maker of yourself..."
+    voice "audio/jamesaudio/james_2.mp3"
     j "by virtue of the thoughts, which you choose and encourage;"
+    voice "audio/jamesaudio/james_3.mp3"
     j "that mind is the master-weaver, both of the inner garment of character and the outer garment of circumstance,"
+    voice "audio/jamesaudio/james_4.mp3"
     j "and I hope that, as you may have hitherto woven in ignorance and pain--"
+    voice "audio/jamesaudio/james_5.mp3"
     j "you may now weave in enlightenment and happiness."
-    u "You ponder this."
-    j "What shall I call you?"
-    $ playername = renpy.input("What shall I call you?", length=20)
 
-    if notplayername
+    "You ponder this."
+
+    menu:
+        "Choose your appearance:"
+        "Masc":
+            $ player_appearance = "option_masc"
+        "Femme":
+            $ player_appearance = "option_femme"
+        "Ambiguous":
+            $ player_appearance = "option_ambiguous"
+        "I don't care":
+            pass
+
+    j "I see. And what shall I call you?"
+    $ playername = renpy.input("What shall I call you?", length=20)
+    $ playername = playername.strip()
+    if not playername or not any(c.isalnum() for c in playername):
         $ playername = "Youthful Reader"
 
-    u "I'm [playername]. Who are you?"
-label choices:
-    default knowsaboutjameslife = False
-    j "I do not think it is of much import. Do you?"
+    u "You can call me [playername]. Who are you?"
+    label choices1:
+        default knowsaboutjameslife = False
+        j "I do not think it is of much import. Do you?"
+        menu:
+            "Yeah, actually, I do.":
+                jump choices1_a
+            "No, you're right. It doesn't matter.":
+                jump choices1_b
 
-menu:
-    u "Yes. I told you my name. Tell me who you are.":
-        jump choices1_a
-    u "No, you're right. It doesn't matter."
-        jump choices1_b
+label choices1_a:
+    j """My name is James Allen. I hail from Leicester. I am the first in my family to learn the art of letters; my mother could neither read nor write.
 
-label choices 1_a:
-    j "My name is James Allen. I hail from Leicester. I am the first in my family to learn the art of letters; my mother could neither read nor write."
-    j "I am a writer, a journalist, a spiritualist. With the help of my inimitable wife, Lily, I run a magazine. I am currently working on a book."
-    j "I had a sense that a person such as you would be here at this cafe. I lack the callowness of a young person; I must needs borrow your keen ear and your discernment, for I am working on a book."
-    j "I cannot ask my Lily for further revision on my message. We have a great love for one another and she lacks a certain objectivity. You do not know me--although you now know quite a bit about me."
+    I am a writer, a journalist, a spiritualist. With the help of my inimitable wife, Lily, I run a magazine. I am currently working on a book.
+
+    I had a sense that a person such as you would be here at this cafe. I lack the callowness of a young person; I must needs borrow your keen ear and your discernment, for I am working on a book.
+
+    I cannot ask my Lily for further revision on my message. We have a great love for one another and she lacks a certain objectivity. You do not know me--although you now know quite a bit about me."""
+
     $ knowsaboutjameslife = True
+    jump choices1_common
 
 label choices1_b:
     j "Very good. I shall then continue."
+    jump choices1_common
 
 label choices1_common:
     scene bg cafe
-    with None
     show james sitting at left
+    with dissolve
 
     j "Avail yourself of the other seat, [playername]. Let us discuss thought and character."
 
+    u "Alright..."
+
     show player sitting at right
+    show expression "player " + player_appearance + " sitting" as player at right
     with dissolve
+
+# NOTE TO SELF:
+
+# For pose changes later in the game, follow the same pattern:
+# show expression "player " + player_appearance + " standing" as player at right
+# Your images should be named to match the strings this produces, e.g.:
+# image player option_masc sitting = "images/player_masc_sitting.png"
+# image player option_masc standing = "images/player_masc_standing.png"
+# image player option_femme sitting = "images/player_femme_sitting.png"
+
+# END OF NOTE
 
     j "There is an aphorism."
     j "'As a man thinketh in his heart so is he,'"
     j "This not only embraces the whole of a man's being,"
     j "but is so comprehensive as to reach out to every condition and circumstance of his life."
     j "A man is literally what he thinks, his character being the complete sum of all his thoughts."
+
     u "And a woman?"
     j "The same. I use the word 'man', 'mankind', and 'men' to refer to all people."
     u "We stopped doing that a while ago."
     j "So you did. I am old, though. I have a certain way of speaking, and I hope you will bear with me."
     u "I will."
     j "Very good."
-    j "As the plant springs from, and could not be without, the seed,"
-    j "so every act of a man springs from the hidden seeds of thought,"
-    j "and could not have appeared without them."
-    j "This applies equally to those acts called 'spontaneous' and 'unpremeditated' as to those which are deliberately executed."
+    j """As the plant springs from, and could not be without, the seed,
+
+    so every act of a man springs from the hidden seeds of thought, and could not have appeared without them."""
+
+    u "'I think, therefore I am.'"
+
+    j "Quite. Note that this applies equally to those acts called 'spontaneous' and 'unpremeditated' as to those which are deliberately executed."
     j "Act is the blossom of thought, and joy and suffering are its fruits; thus does a man garner in the sweet and bitter fruitage of his own husbandry."
 
-    show Poet standing at center
+    u "My grandfather always said that you reap what you sow..."
 
-    "The Poet" "Thought in the mind hath made us, What we are"
-    "The Poet" "By thought was wrought and built. If a man's mind"
-    "The Poet" "Hath evil thoughts, pain comes on him as comes"
-    "The Poet" "The wheel the ox behind...."
-    "The Poet" "..If one endure"
-    "The Poet" "In purity of thought, joy follows him"
-    "The Poet" "As his own shadow—sure."
+    show poet standing at center
+    with easeinright
+    pause(1.0)
+
+    "The Poet" """Thought in the mind hath made us what we are
+
+    By thought was wrought and built. If a man's mind
+
+    Hath evil thoughts, pain comes on him as comes
+
+    The wheel the ox behind....
+
+    ..If one endure
+
+    In purity of thought, joy follows him
+
+    As his own shadow—sure."""
+
+    hide poet standing
 
     j "Man is a growth by law, and not a creation by artifice,"
     j "and cause and effect is as absolute and undeviating in the hidden realm of thought as in the world of visible and material things."
@@ -124,15 +255,18 @@ label choices1_common:
     j "Understanding, Wisdom, Power."
     j "In this direction, as in no other, is the law absolute that:"
     
-    show book at center
+    show thebook at top
+    with zoominout
+    pause(1.0)
 
     "The Book" "He that seeketh findeth; and to him that knocketh it shall be opened;"
 
-    hide book
-    show james happy
+    hide thebook
+    with zoominout
+    pause(1.0)
 
     j "for only by patience, practice, and ceaseless importunity can a man enter the Door of the Temple of Knowledge."
-    "Then I will be patient, and I will practice."
+    u "Then I will be patient, and I will practice."
     j "I know that you will."
     j "Let us now speak of the effect of Thought on circumstances."
     j "Man's mind may be likened to a garden, which may be intelligently cultivated or allowed to run wild;"
@@ -153,13 +287,13 @@ label choices1_common:
     j "Thought and character are one,"
     j "and as character can only manifest and discover itself through environment and circumstance,"
     j "the outer conditions of a person's life will always be found to be harmoniously related to his inner state."
-    "I've been struggling with things lately, and I haven't been doing well."
-    "I'm not living up to my ideals."
+    u "I've been struggling with things lately, and I haven't been doing well."
+    u "I'm not living up to my ideals."
     j "What I have said does not mean that a man's circumstances at any given time are an indication of his entire character."
-    "So I am more than the person I am in low circumstances?"
+    u "So I am more than the person I am in low circumstances?"
     j "Indeed--with the exception of when those circumstances are intimately connected with some vital thought-element within yourself..."
     j "so intimately connected, that, for the time being, they are indispensable to your development..."
-    "Oh, that's not the case."
+    u "Oh, that's not the case."
     j "Then your circumstances right now are not an indication of your entire character."
     j "Every man is where he is by the law of his being;"
     j "the thoughts which he has built into his character have brought him there,"
@@ -193,22 +327,22 @@ label choices1_common:
     j "a man at last arrives at their fruition and fulfilment in the outer conditions of his life."
     j "The laws of growth and adjustment everywhere obtains."
     j "A man does not come to the almshouse or the jail by the tyranny of fate or circumstance."
-    "I don't agree with that."
+    u "I don't agree with that."
     j "You may disagree. That is fine, of course you may."
     j "I believe that a man finds himself in these places by the pathway of grovelling thoughts and base desires."
     j "A pure-minded man does not fall suddenly into crime by stress of any mere external force;"
     j "the criminal thought had long been secretly fostered in the heart, and the hour of opportunity revealed its gathered power."
-    "Maybe."
+    u "Maybe."
     j "This is my philosophy. You may write your own."
-    "I will."
+    u "I will."
     j "I anticipate reading it. I believe that the philosophies of life are the greatest thing we may put our minds to."
     j "I sometimes fear that your generation does not value this science--"
-    "Writing is an art."
+    u "Writing is an art."
     j "Philosophy is an art and a science."
     j "In any case, I encourage you to put your thoughts to paper, or canvas, or perhaps the digital realm that we find ourselves in now."
-    "I will."
+    u "I will."
     j "Good."
-    "So... you were saying?"
+    u "So... you were saying?"
     j "Indeed. Ahem."
     j "Circumstance does not make the man; it reveals him to himself."
     j "No such conditions can exist as descending into vice and its attendant sufferings apart from vicious inclinations,"
@@ -220,14 +354,30 @@ label choices1_common:
     j "which are the reflections of its own purity and impurity,"
     j "its strength and weakness."
     j "There are some books you may be familiar with--"
-    "Self-help books?"
+    u "Self-help books?"
     j "Indeed--"
+
+    show thelawofattraction at top
+    with zoominout
+    pause(1.0)
+    with dissolve
+
     j "The Law of Attraction"
+
+    hide thelawofattraction
+    show thesecret at top
+
     j "The Secret"
+
+    hide thesecret
+    with zoominout
+    pause(1.0)
+    with dissolve
+
     j "Books such as these--have you read them?"
-    "When they came out, I did."
+    u "When they came out, I did."
     j "Did you find them useful?"
-    "Not very."
+    u "Not very."
     j "That is to be expected."
     j "Men do not attract that which they want, but that which they are."
     j "Their whims, fancies, and ambitions are thwarted at every step, but their inmost thoughts and desires are fed with their own food, be it foul or clean."
@@ -248,6 +398,7 @@ label choices1_common:
     j "Even the man whose sole object is to acquire wealth must be prepared to make great personal sacrifices before he can accomplish his object; and how much more so he who would realize a strong and well-poised life?"
 
     show poorman wretched
+    with dissolve
 
     j "Here is a man who is wretchedly poor."
     j " He is extremely anxious that his surroundings and home comforts should be improved,"
@@ -256,18 +407,24 @@ label choices1_common:
     j "and is not only totally unfitted to rise out of his wretchedness,"
     j "but is actually attracting to himself a still deeper wretchedness by dwelling in, and acting out, indolent, deceptive, and unmanly thoughts."
 
-    show rich man wretched
+    hide poorman wretched
+    show richman wretched
 
     j "Here is a rich man who is the victim of a painful and persistent disease as the result of gluttony."
     j "He is willing to give large sums of money to get rid of it, but he will not sacrifice his gluttonous desires."
     j "He wants to gratify his taste for rich and unnatural viands and have his health as well."
     j "Such a man is totally unfit to have health, because he has not yet learned the first principles of a healthy life."
 
+    hide richman wretched
     show employer wretched
 
     j "Here is an employer of labour who adopts crooked measures to avoid paying the regulation wage, and, in the hope of making larger profits, reduces the wages of his workpeople."
     j "Such a man is altogether unfitted for prosperity, and when he finds himself bankrupt, both as regards reputation and riches,"
     j "he blames circumstances, not knowing that he is the sole author of his condition."
+
+    hide employer wretched
+    with dissolve
+
     j "I have introduced these three cases merely as illustrative of the truth that man is the causer (though nearly always is unconsciously) of his circumstances,"
     j "and that, whilst aiming at a good end, he is continually frustrating its accomplishment"
     j "by encouraging thoughts and desires which cannot possibly harmonize with that end."
@@ -306,7 +463,7 @@ label choices1_common:
     j "The sole and supreme use of suffering is to purify, to burn out all that is useless and impure."
     j "Suffering ceases for him who is pure."
     j "There could be no object in burning gold after the dross had been removed, and a perfectly pure and enlightened being could not suffer."
-    j "The circumstances, which a man encounters with suffering, are the result of his own mental in harmony."
+    j "The circumstances, which a man encounters with suffering, are the result of his own mental inharmony."
     j "The circumstances, which a man encounters with blessedness, are the result of his own mental harmony."
     j "Blessedness, not material possessions, is the measure of right thought;"
     j "wretchedness, not lack of material possessions, is the measure of wrong thought."
@@ -346,7 +503,7 @@ label choices1_common:
     j "let him encourage good thoughts, and no hard fate shall bind him down to wretchedness and shame."
     j "The world is your kaleidoscope, and the varying combinations of colours, which at every succeeding moment it presents to you are the exquisitely adjusted pictures of your ever-moving thoughts."
 
-    show Poet happy
+    show poet standing
 
     "The Poet" "So You will be what you will to be;"
     "The Poet" "Let failure find its false content"
@@ -365,12 +522,13 @@ label choices1_common:
     "The Poet" "When spirit rises and commands"
     "The Poet" "The gods are ready to obey."
 
-    show james happy
+    hide poet standing
+
     j "Let us now speak of the effects of thought on your health and your body."
     j "Would you agree that the body is the servant of the mind?"
-    "I'm not sure..."
+    u "I'm not sure..."
     j "The body is the servant of the mind."
-    "Why did you even ask me if my opinion didn't matter to you?"
+    u "Why did you even ask me if my opinion didn't matter to you?"
     j "I share the wisdom I possess. You may discard what you wish to discard."
     j "It is of no import to me."
     j "The body obeys the operations of the mind, whether they be deliberately chosen or automatically expressed."
@@ -388,26 +546,26 @@ label choices1_common:
     j "Men will continue to have impure and poisoned blood, so long as they propagate unclean thoughts."
     j "Out of a clean heart comes a clean life and a clean body. Out of a defiled mind proceeds a defiled life and a corrupt body."
     j "Thought is the fount of action, life, and manifestation; make the fountain pure, and all will be pure."
-    "This all kind of reminds me of that Christian woman with the big hair who had that faith-based diet group."
+    u "This all kind of reminds me of that Christian woman with the big hair who had that faith-based diet group."
     j "I know not of whom you speak."
-    "Gwen... something."
+    u "Gwen... something."
     j "I am not suggesting you subsist upon raw berries and roughage that you forage in the woods."
-    "I think that church group was more about sugar-free pudding and Cool-Whip and fat-free vanilla lattes. Maybe they did eat some actual food for dinner. Like, steamed broccoli or something."
+    u "I think that church group was more about sugar-free pudding and Cool-Whip and fat-free vanilla lattes. Maybe they did eat some actual food for dinner. Like, steamed broccoli or something."
     j "Talk of food is of scant interest to me."
-    "Well, I used to be a food reviewer at the Boston Gazette back when you could still make a living off that, so--"
+    u "Well, I used to be a food reviewer at the Boston Gazette back when you could still make a living off that, so--"
     j "Sure. What a surfeit of highly useful information you have for me. In any case, and to get back to what I was attempting to communicate:"
     j "--a change of diet will not help a man who will not change his thoughts."
     j "If the diet of Gwen Something significantly changed, it was her thoughts that changed first." 
     j "When a man--or woman--makes his thoughts pure, he no longer desires impure food."
     j "Clean thoughts make clean habits."
-    "Cleanliness is next to Godliness?"
+    u "Cleanliness is next to Godliness?"
     j "Indeed."
     j "The so-called saint who does not wash his body is not a saint."
     j "He who has strengthened and purified his thoughts does not need to consider the malevolent microbe."
     j "If you would protect your body, guard your mind. If you would renew your body, beautify your mind."
     j "Thoughts of malice, envy, disappointment, despondency, rob the body of its health and grace."
     j "A sour face does not come by chance; it is made by sour thoughts. Wrinkles that mar are drawn by folly, passion, and pride."
-    "So... don't make ugly faces in case your face gets stuck that way?"
+    u "So... don't make ugly faces in case your face gets stuck that way?"
     j "I know a woman of ninety-six who has the bright, innocent face of a girl."
     j "I know a man well under middle age whose face is drawn into inharmonious contours."
     j "The one is the result of a sweet and sunny disposition; the other is the outcome of passion and discontent."
@@ -559,7 +717,7 @@ label choices1_common:
     j "Composer, sculptor, painter, poet, prophet, sage, these are the makers of the after-world, the architects of heaven. The world is beautiful because they have lived; without them, labouring humanity would perish."
     j "He who cherishes a beautiful vision, a lofty ideal in his heart, will one day realize it."
     j "Columbus cherished a vision of another world, and he discovered it;"
-    label choices:
+    label choices2:
         u "Well, not exactly--"
         u "He sure did!"
     j "Copernicus fostered the vision of a multiplicity of worlds and a wider universe, and he revealed it;"
@@ -600,7 +758,9 @@ label choices1_common:
     j "Whatever your present environment may be, you will fall, remain, or rise with your thoughts, your Vision, your Ideal."
     j "You will become as small as your controlling desire; as great as your dominant aspiration."
     j "in the beautiful words of Stanton Kirkham Davis:"
+
     show Davis happy
+
     "Stanton Kirkham Davis" "You may be keeping accounts,"
     "Stanton Kirkham Davis" "and presently you shall walk out of the door that for so long has seemed to you the barrier of your ideals,"
     "Stanton Kirkham Davis" "and shall find yourself before an audience—the pen still behind your ear, the ink stains on your fingers and then and there shall pour out the torrent of your inspiration."
@@ -609,7 +769,7 @@ label choices1_common:
     "Stanton Kirkham Davis" "And now you have become the master, who did so recently dream of great things while driving sheep."
     "Stanton Kirkham Davis" "You shall lay down the saw and the plane to take upon yourself the regeneration of the world."
 
-label flags: if knowsaboutjameslifestory
+label flags:
     if knowsaboutjameslifestory:
         u "Is... was he a friend of yours?"
         j "We briefly met whilst he was traveling around the British Isles. I admired his work very much."
@@ -666,7 +826,7 @@ label flags: if knowsaboutjameslifestory
     j "Right Thought is mastery;"
     j "Calmness is power."
     j "Say unto your heart, 'Peace, be still!'"
-    j "Say it!"
+    j "Say it!" with vpunch
     "Peace, be still."
     j "Peace, be still."
     "Peace, be still."
