@@ -142,6 +142,23 @@ label start:
     "You are dreaming."
 
     scene bg cafe
+
+### cafe talk variables
+
+$ latte_flavor = renpy.random.choice(['rosemary',  'goat milk', 'Spanish', 'chai', 'strawberry matcha', 'banana milk', 'peanut butter', 'sweet potato', 'London Fog', 'gooseberry', 'mandarin orange', 'Vietnamese egg', 'coconut milk', 'oat milk', 'peppermint', 'skinny vanilla', 'Dubai chocolate', 'pistachio', 'pink praline', 'passionfruit', 'starfruit', 'blueberry matcha', 'pennyroyal mint tea', 'cardamom', 'golden milk', 'ginseng', 'burnt sugar', 'brown butter', 'coconut', 'jaggery', 'lavender', 'blackberry', 'blackberry matcha', 'ground cherry', 'blended banana', 'Mazapan', 'lychee', 'cheese foam', 'palm sugar', 'bulletproof', 'cinnamon habanero', 'ras el hanout', 'pumpkin spice', 'Sichuan pepper', 'eggnog', 'raspberry matcha', 'raspberry chocolate', 'cherry chocolate', 'cherimoya', 'dragonfruit', 'prickly pear'])
+
+$ tea_flavor = renpy.random.choice(['orange blossom',  'oolong', 'Amazigh herbal', 'apricot black', 'ashwagandha', 'Assam', 'Earl Grey'])
+
+$ nice_city = renpy.random.choice(['Casablanca', 'Reno', 'Las Vegas', 'Lisbon', 'Bordeaux', 'Stockholm', 'Bruges', 'Granada', 'Toulouse', 'Lagos', 'Rio de Janeiro', 'Florianopolis', 'Belo Horizonte', 'Funchal', 'Pau', 'Dax', 'Perpignan', 'Aljustrel', 'Aljezur', 'Baixa da Banheira', 'Porto', 'Irvine', 'Chicago', 'Espinho', 'Cairo', 'Dar es Salaam', 'Umm al Khair', 'Tunis', 'Maputo', 'Rabat', 'Lahore', 'Islamabad', 'Beijing', 'Istanbul', 'Izmir', 'Ho Chi Minh City', 'Chennai', 'Quanzhou', 'Osaka', 'Almaty', 'Phnom Penh', 'Tblisi', 'Bucharest', 'Seixal', 'Samarkand', 'Isfahan', 'Rome', 'Paris', 'New York City', 'Newark'])
+
+$ male_regular_name = renpy.random.choice(['Jake',  'Ali', 'Mamoun', 'Tynan', 'Daniel', 'Azim', 'Mike', 'Josh', 'Matt', 'Chris', 'Ryan', 'Andrew', 'Noah', 'Ahson', 'Brandon', 'Dylan', 'Jesus', 'Mohammed', 'Kevin', 'Luis', 'Angel', 'Jayden', 'Aidan', 'Jorge', 'Ian', 'Diego', 'Cole', 'Jeremiah', 'Xavier', 'Miguel', 'Sebastian', 'Adam', 'Eli', 'Myron'])
+
+$ female_regular_name = renpy.random.choice(['Emma', 'Justine', 'Bridget', 'Miriam', 'Maryam', 'Ruth', 'Belle', 'June', 'Eve', 'Sam', 'Janis', 'Andrea', 'Esperanza', 'Hope', 'Cleo', 'Barbara', 'Wendy', 'Krystal', 'Sofia', 'Mathilde', 'Aisha', 'Kadijah', 'Anfisa', 'Irina', 'Kat', 'Lyudmila', 'Natalya'])
+
+$ garden_plant = renpy.random.choice(['butterfly milkweed', 'honeysuckle', 'musk melon', 'amaranth', 'asparagus', 'Thai basil', 'ornamental cabbage', 'red coleus', 'columbine', 'dandelions', 'hollyhock', 'lemon thyme', 'lemongrass', 'mizuna', 'okra', 'weed'])
+
+### end cafe variables
+
     show james standing at center
     with Fade(0.0, 0.0, 3.0)
 
@@ -209,7 +226,7 @@ label choices1_common:
     show expression "player " + player_appearance + " sitting" as player at right
     with dissolve
 
-# NOTE TO SELF:
+# NOTE TO SELF: TODO
 
 # For pose changes later in the game, follow the same pattern:
 # show expression "player " + player_appearance + " standing" as player at right
@@ -312,56 +329,263 @@ label choices2_common:
     voice "audio/ppaudio/pp_10.mp3"
     "The Poet" "As his own shadow—sure."
     pause(2.0)
+    voice "audio/jamesaudio/james_21.mp3"
     j "Bravo! Bravo!"
+    voice "audio/jamesaudio/james_22.mp3"
     j "Beautiful words as always, my friend."
-    "Pietro" "Thank you, my friend. My colleague in wordsmithery. It was my pleasure to perform my poem."
+    voice "audio/ppaudio/pp_11.mp3"
+    "Pietro" "Thank you, my good man. My colleague in wordsmithery. It was my pleasure to perform my poem."
+    voice "audio/ppaudio/pp_12.mp3"
     "Pietro" "Fare thee well--both of you. My break has ended, and I must return to my post at the espresso machine..."
     hide pietro poet
     with easeoutright
     menu:
-        "That was weird.":
-            jump choices3_common
         "Wow, what a beautiful poem.":
+            jump choices3_common
+        "A barista who's also a poet. How original.":
             jump choices3_common
 
 label choices3_common:
+    voice "audio/jamesaudio/james_23.mp3"
     j "Indeed."
+    voice "audio/jamesaudio/james_24.mp3"
+    j "Before I continue, [playername], I think I would like to whet my beak. Would you care for anything to drink?"
+    menu:
+        "Yes, please.":
+            jump choices4_a
+        "No, thanks.":
+            jump choices4_b
+
+label choices4_a:
+    u "I'd like a--"
+    voice "audio/jamesaudio/james_24a1.mp3"
+    j "I shall order my favorite item on the menu for you."
+
+    hide james sitting
+    with None
+    show james standing
+    with None
+    pause(2.0)
+    hide james standing
+    with easeoutright
+    pause(4.0)
+    show james standing
+    with easeinright
+    voice "audio/jamesaudio/james_24a2.mp3"
+    j "Our dear friend, the poet, is currently preparing a very special [latte_flavor] latte for each one of us. I hope you shall find it as delectable as I myself do."
+    u "I think I'm more interested in what you have to say, but I'm excited to try your favorite drink!"
+    voice "audio/jamesaudio/james_24a3.mp3"
+    j "Such an eager student! I will then continue. Ahem!"
+    jump choices4_common
+
+label choices4_b
+    voice "audio/jamesaudio/james_24b1.mp3"
+    j "Nonsense! I will put in the order and return with haste."
+
+    hide james sitting
+    with None
+    show james standing
+    with None
+    pause(2.0)
+    hide james standing
+    with easeoutright
+
+    u "Yeah. Alright. Okay. I'll drink the latte."
+
+    show james standing
+    with easeinright
+    u "Thank you, James. I appreciate it. Very kind of you."
+    voice "audio/jamesaudio/james_24b2.mp3"
+    j "Generosity is a joy for the giver, [playername]. Indeed, I have you to thank."
+    u "It'll be fun to try something new."
+    u "Speaking of something new... what were you saying?"
+    jump choices4_common
+
+label choices4_common:
+    voice "audio/jamesaudio/james_25.mp3"
     j "Man is a growth by law, and not a creation by artifice,"
+    voice "audio/jamesaudio/james_26.mp3"
     j "and cause and effect is as absolute and undeviating in the hidden realm of thought as in the world of visible and material things."
+    voice "audio/jamesaudio/james_27.mp3"
     j "A noble and Godlike character is not a thing of favour or chance,"
+    voice "audio/jamesaudio/james_28.mp3"
     j "but is the natural result of continued effort in right thinking,"
+    voice "audio/jamesaudio/james_29.mp3"
     j "the effect of long-cherished association with Godlike thoughts."
-    j "An ignoble and bestial character, by the same process, is the result of the continued harbouring of grovelling thoughts."
-    j "Man is made or unmade by himself;"
-    j "in the armoury of thought he forges the weapons by which he destroys himself;"
-    j "he also fashions the tools with which he builds for himself heavenly mansions of joy and strength and peace."
-    j "By the right choice and true application of thought, man ascends to the Divine Perfection;"
-    j "by the abuse and wrong application of thought, he descends below the level of the beast."
+    u "What if I'm an atheist? Or a pantheist?"
+    voice "audio/jamesaudio/james_30.mp3"
+    j "Your cheek is not always welcome."
+    u "No?"
+    voice "audio/jamesaudio/james_30.mp3"
+    j "Sarcasm is an ignoble form of expression, [playername]. And an ignoble and bestial character, formed by a dearth of right-thinking, is the result of the continued harbouring of grovelling thoughts."
+    u "Do I have an ignoble, bestial character?"
+    voice "audio/jamesaudio/james_31.mp3"
+    j "You are still young. You have yet to be fully defined. And you will be the one to define you, not I."
+    u "Is anyone ever fully defined? You know, like for good? I think people can change."
+    voice "audio/jamesaudio/james_32.mp3"
+    j "I agree. Man is made or unmade by himself. This is a process that is accessible at any age, if a man wishes to access it."
+    voice "audio/jamesaudio/james_33.mp3"
+    j "In the armoury of thought, man forges the weapons by which he destroys himself."
+    voice "audio/jamesaudio/james_34.mp3"
+    j "However, he also fashions the tools with which he builds for himself heavenly mansions of joy and strength and peace."
+    voice "audio/jamesaudio/james_35.mp3"
+    j "By the right choice and true application of thought, man ascends to the Divine Perfection."
+    voice "audio/jamesaudio/james_36.mp3"
+    j "By the abuse and wrong application of thought, he descends below the level of the beast."
+    voice "audio/jamesaudio/james_37.mp3"
     j "Between these two extremes are all the grades of character, and man is their maker and master."
-    j "Of all the beautiful truths pertaining to the soul which have been restored and brought to light in this age,"
-    j "none is more gladdening or fruitful of divine promise and confidence than this—"
+    voice "audio/jamesaudio/james_38.mp3"
+    j "Of all the beautiful truths pertaining to the soul which have been restored and brought to light in this age, none is more gladdening or fruitful of divine promise and confidence than this—"
+    voice "audio/jamesaudio/james_39.mp3"
     j "that man is the master of thought, the moulder of character, and the maker and shaper of condition, environment, and destiny."
+    voice "audio/jamesaudio/james_40.mp3"
     j "As a being of Power, Intelligence, and Love, and the lord of his own thoughts,"
+    voice "audio/jamesaudio/james_41.mp3"
     j "man holds the key to every situation,"
+    voice "audio/jamesaudio/james_42.mp3"
     j "and contains within himself that transforming and regenerative agency by which he may make himself what he wills."
+    voice "audio/jamesaudio/james_43.mp3"
+    j "So, yes, [playername]--I agree with you. A man can change--rather, a person can change."
+    u "Even you, I see."
+    voice "audio/jamesaudio/james_44.mp3"
+    j "But of course."
+    u "By the way, are you hungry? I can order you something to eat."
+    voice "audio/jamesaudio/james_45.mp3"
+    j "Perhaps after I have enjoyed my [latte_flavor] latte. But not yet."
+    u "You have more to say?"
+    voice "audio/jamesaudio/james_46.mp3"
+    j "Always." 
+    voice "audio/jamesaudio/james_47.mp3"
+    j "[playername], do you often feel powerless?"
+    menu:
+    "Yeah."
+        jump choices5_a
+    "Honestly, no."
+        jump choices5_b
+    "I don't see how that's any of your business."
+        jump choices5_c
+
+label choices5_a:
+    voice "audio/jamesaudio/james_47a1.mp3"
+    j "When?"
+    u "When I work hard and make plans and sacrifice things I really wanted and needed but I end up with nothing."
+    voice "audio/jamesaudio/james_47a2.mp3"
+    j "And it happens often?"
+    u "Yeah. It does."
+    jump choices 5_common
+
+label choices5_b:
+    voice "audio/jamesaudio/james_b1.mp3"
+    j "Interesting."
+    u "Is it?"
+    voice "audio/jamesaudio/james_47b2.mp3"
+    j "Yes. You are not, then, the person of whom I speak; the man I describe."
+    voice "audio/jamesaudio/james_47b3.mp3"
+    j "Though I am certain he will sound familiar to you. You will surely have met him."
+    voice "audio/jamesaudio/james_47b4.mp3"
+    j "Ahem."
+    jump choices 5_common
+
+label choices 5_c:
+    voice "audio/jamesaudio/james_47c1.mp3"
+    j "Fair enough, dear [playername].
+    u "And don't call me 'dear'. We don't know each other like that."
+    voice "audio/jamesaudio/james_47c2.mp3"
+    j "It is a manner of speaking; I hope you will forgive it. To continue:"
+    jump choices 5_common
+
+label choices 5_common:
+    voice "audio/jamesaudio/james_48.mp3"
     j "Man is always the master, even in his weaker and most abandoned state;"
+    voice "audio/jamesaudio/james_49.mp3"
     j "but in his weakness and degradation he is the foolish master who misgoverns his 'household.'"
+    voice "audio/jamesaudio/james_50.mp3"
     j "When he begins to reflect upon his condition,"
+    voice "audio/jamesaudio/james_51.mp3"
     j "and to search diligently for the Law upon which his being is established,"
+    voice "audio/jamesaudio/james_52.mp3"
     j "he then becomes the wise master, directing his energies with intelligence, and fashioning his thoughts to fruitful issues."
+    voice "audio/jamesaudio/james_53.mp3"
     j "Such is the conscious master,"
+    voice "audio/jamesaudio/james_54.mp3"
     j "and man can only thus become by discovering within himself the laws of thought;"
+    voice "audio/jamesaudio/james_55.mp3"
     j "which discovery is totally a matter of application, self analysis, and experience."
+    voice "audio/jamesaudio/james_56.mp3"
     j "Only by much searching and mining, are gold and diamonds obtained,"
+    voice "audio/jamesaudio/james_57.mp3"
     j "and man can find every truth connected with his being, if he will dig deep into the mine of his soul;"
+    voice "audio/jamesaudio/james_58.mp3"
     j "and that he is the maker of his character, the moulder of his life, and the builder of his destiny, he may unerringly prove,"
+    voice "audio/jamesaudio/james_59.mp3"
     j "if he will watch, control, and alter his thoughts,"
+    voice "audio/jamesaudio/james_60.mp3"
     j "tracing their effects upon himself, upon others, and upon his life and circumstances,"
+    voice "audio/jamesaudio/james_61.mp3"
     j "linking cause and effect by patient practice and investigation,"
+    voice "audio/jamesaudio/james_62.mp3"
     j "and utilizing his every experience, even to the most trivial, everyday occurrence,"
+    voice "audio/jamesaudio/james_63.mp3"
     j "as a means of obtaining that knowledge of himself which is:"
-    j "Understanding, Wisdom, Power."
-    j "In this direction, as in no other, is the law absolute that:"
+    voice "audio/jamesaudio/james_64.mp3"
+    j "Understanding."
+    voice "audio/jamesaudio/james_65.mp3"
+    j "And it is Wisdom. And it is Power."
+    pause(2.0)
+    u "James, I'm really sorry. I need to go use the bathroom."
+    j "It is normal."
+    hide player
+    with easeoutright
+    scene bgcafe
+    with Fade(2.0,0.0,2.0)
+
+######### TODO latte_flavor latte should just conveniently be at the table when they get back
+
+label choices6:
+    default gourmand = False
+    j "Your [latte_flavor] has preceded you, [playername]."
+    default knowsaboutjameslife = False
+    menu:
+        "Yum!":
+            jump choices6_a
+        "Hmm...":
+            jump choices6_b
+label choices_6a:
+    j "Indeed, indeed. A very fine latte."
+    j "Pietro, you've done it again!"
+    u "Thanks, Pietro! This is so good."
+    $ gourmand = True
+    "Pietro" "It is my calling, and my duty, to make the greatest [latte_flavor] latte in this forsaken world!"
+    u "Um... yeah!"
+    u "I guess the world could always use more [latte_flavor] lattes. And love and peace, I suppose."
+    jump choices6_common
+
+label choices_6b:
+    j "Life is not so long. I caution against over-indulgence in the pleasures of the flesh--but you must, too, take your pleasures in life."
+    u "This one's not really a pleasure for me, James. I gotta be honest."
+    j "'I am who I am'."
+    u "Yeah, and I'm a person who doesn't like [latte_flavor] lattes, I guess.
+    j "You are who you are. A beverage preference is a matter of no great importance."
+    j "If I may indulge a bit more than is typical of me..."
+    u "Yeah, you can have mine."
+    j "I give you my appreciation."
+    jump choices6_common
+
+label choices6_common:
+    u "James, did I miss anything else while I was gone?"
+    j "Pietro informed me that a friend of mine, [male_regular_name], recently took up with [female_regular_name]--she comes every Tuesday for an [tea_flavor] tea. Several months ago, the two of them began speaking and [male_regular_name] fell in love... They have gone on holiday in [nice_city]."
+    u "These are real people?"
+    j "Why, yes, of course. Is there any other kind?"
+    u "Real people can meet here, at this cafe? In real life?"
+    j "I am real, [playername], and you likewise, I expect. And Pietro as well. Everybody in this cafe is real."
+    u "But it's a dream."
+    j "But the people in the dream are real. It is true; we do not live in the same time or place in our waking hours."
+    j "The two people I spoke of--[female_regular_name] and [male_regular_name]---actually lived a great distance from one another. But, at least, the same era."
+    u "Sounds like a happy ending."
+    j "It is life; it has not ended. I believe it never ends."
+    u "Are you alive?"
+    j "What a question! I believe you are trying to distract me, [playername]! A valiant attempt. However, I will now continue."
+    j "There is an absolute law, and it comes to us from The Book. I believe you are aware of which book I am speaking.
     
     show thebook at top
     with zoominout
@@ -373,32 +597,65 @@ label choices3_common:
     with zoominout
     pause(1.0)
 
-    j "for only by patience, practice, and ceaseless importunity can a man enter the Door of the Temple of Knowledge."
-    u "Then I will be patient, and I will practice."
+    j "In my time, there was one book that was read by all. The Book. You know which. I understand that times have changed."
+    u "I guess they have, but I took a class in community college called 'The Bible as Literature'. I get it."
+    j "I would take umbrage at not calling it poetry, but, indeed, it is fine literature. Did you understand the quote?"
+    u "I think so, but you should probably tell me what it means to you, too."
+    j "So. Only by patience, practice, and ceaseless importunity can a man enter the Door of the Temple of Knowledge."
+    j "Will you be patient, [playername]? Will you practice?"
+
+label choices7:
+    menu:
+        "I will.":
+            pass
+        "I'm not sure...":
+            pass
+
+label choices:7_common
     j "I know that you will."
-    j "Let us now speak of the effect of Thought on circumstances."
+    j "Let us now speak of the effect of thought on circumstances."
+    j "[playername], do you garden?"
+    u "I do! I'm growing [garden_plant] right now and--"
     j "Man's mind may be likened to a garden, which may be intelligently cultivated or allowed to run wild;"
     j "but whether cultivated or neglected,"
     j "it must, and will, bring forth."
+    j "[playername], did you sow your plot of [garden_plant] with seeds?"
+    u "Yeah, of course."
+    j "Very good! Your thoughts, too, are seeds."
+    j "Your mind is the plot."
     j "If no useful seeds are put into it,"
     j "then an abundance of useless weed-seeds will fall therein, and will continue to produce their kind."
-    j "Just as a gardener cultivates his plot, keeping it free from weeds, and growing the flowers and fruits which he requires,"
-    j "so may a man tend the garden of his mind,"
-    j "weeding out all the wrong, useless, and impure thoughts,"
-    j "and cultivating toward perfection the flowers and fruits of right, useful, and pure thoughts."
-    j "By pursuing this process, a man sooner or later discovers that he is:"
-    j "the master-gardener of his soul,"
-    j "and the director of his life."
+    j "Just as you cultivate your plot, keeping it free from unwanted weeds, and growing the flowers or fruits which you require,"
+    j "so may a man tend the garden of his mind."
+    j "Or any person."
+
+label choices7:
+    menu:
+        "Not just a man.":
+        $ drinksrespectwomenjuice = True
+        j "That's right."
+        j "And they may weed out all the wrong, useless, and impure thoughts in their mind, cultivating toward perfection the flowers and fruits of right, useful, and pure thoughts."
+            pass
+        "Sure, yeah, whatever. I mean, that's implied.":
+        "Tending his garden, a man must weed out all the wrong, useless, and impure thoughts in his mind, cultivating toward perfection the flowers and fruits of right, useful, and pure thoughts."
+            pass
+
+    j "By pursuing this process, the gardener sooner or later discovers that he is the master-gardener of his soul and the director of his life."
     j "He also reveals, within himself, the laws of thought,"
     j "and understands, with ever-increasing accuracy,"
     j "how the thought-forces and mind elements operate in the shaping of his character, circumstances, and destiny."
-    j "Thought and character are one,"
-    j "and as character can only manifest and discover itself through environment and circumstance,"
-    j "the outer conditions of a person's life will always be found to be harmoniously related to his inner state."
+    u "I see."
+    j "Your thought and your character are one."
+    u "How do I know what my character is? I don't even always know what my thoughts are."
+    u "Like, of course I know I'm having them, I'm just not always conscious of what they are."
+    j "Character can only manifest and discover itself through environment and circumstance."
+    u "So, it depends on where I am."
+    j "The outer conditions of a person's life will always be found to be harmoniously related to his inner state."
     u "I've been struggling with things lately, and I haven't been doing well."
-    u "I'm not living up to my ideals."
+    u "I'm not living up to my ideals. My thoughts are pretty negative, so I guess that means my character's pretty lousy, too."
     j "What I have said does not mean that a man's circumstances at any given time are an indication of his entire character."
-    u "So I am more than the person I am in low circumstances?"
+    j "You are more than the person you seem to be in low circumstances."
+    u "I am?"
     j "Indeed--with the exception of when those circumstances are intimately connected with some vital thought-element within yourself..."
     j "so intimately connected, that, for the time being, they are indispensable to your development..."
     u "Oh, that's not the case."
@@ -406,18 +663,48 @@ label choices3_common:
     j "Every man is where he is by the law of his being;"
     j "the thoughts which he has built into his character have brought him there,"
     j "and in the arrangement of his life there is no element of chance, but all is the result of a law which cannot err."
-    j "This is just as true of those who feel 'out of harmony' with their surroundings as of those who are contented with them."
-    j "As a progressive and evolving being,"
-    j "man is where he is that he may learn that he may grow;"
-    j "and as he learns the spiritual lesson which any circumstance contains for him, it passes away and gives place to other circumstances."
-    j "Man is buffeted by circumstances so long as he believes himself to be the creature of outside conditions,"
-    j "but when he realizes that he is a creative power,"
-    j "and that he may command the hidden soil and seeds of his being out of which circumstances grow,"
-    j "he then becomes the rightful master of himself."
-    j "That circumstances grow out of thought every man knows who has for any length of time practised self-control and self-purification,"
-    j "for he will have noticed that the alteration in his circumstances has been in exact ratio with his altered mental condition."
-    j "So true is this that when a man earnestly applies himself to remedy the defects in his character, and makes swift and marked progress,"
-    j "he passes rapidly through a succession of vicissitudes."
+    u "These seem like things that conflict with each other."
+    j "An illusion. Listen to me, [playername]. I believe your understanding will grow."
+    j "What I have described is just as true of those who feel 'out of harmony' with their surroundings as of those who are contented with them."
+    j "As a progressive and evolving being, a person is where he is that he may learn. That he may grow."
+    j "As he learns the spiritual lesson set out for him--"
+    u "Who sets it out?"
+    j "Every circumstance in life contains a spiritual lesson."
+    j "Once a person has learned the spiritual lesson in their circumstance, it passes away and gives place to other circumstances."
+    u "So we're always learning one lesson or another."
+    j "A person is buffeted by circumstances so long as they believe themselves to be a creature of outside conditions."
+    j "When a person finally realizes that they are a creative power, everything changes."
+    j "A man in full creative force may command the hidden soil and seeds of his being out of which circumstances grow."
+    j "He then becomes the rightful master of himself."
+    u "What if he's struggling with motivation?"
+    u "Hypothetically, I mean. Like, say there's a guy who has trouble getting out of bed every morning..."
+    j "That circumstances grow out of thought every man knows who has for any length of time practised self-control and self-purification."
+    j "An alteration in your circumstances is in exact ratio with your altered mental condition. I'm sure you have noticed this in your own life."
+    u "Hey... I didn't say the hypothetical guy was me."
+    j "You did not have to, [playername]."
+    j "So true is this: that when a man earnestly applies himself to remedy the defects in his character, and makes swift and marked progress, he passes rapidly through a succession of vicissitudes."
+    u "Vicissitudes?"
+    "Pietro" "The ups and downs of my life."
+    j "My friend, I did not know you were listening in."
+
+show Pietro barista
+with easeinright
+
+    "Pietro" "Would you like something else to drink?"
+    j "An [tea_flavor] tea for me, if you do not mind."
+    "Pietro" "Hot?"
+    j "But of course."
+    "Pietro" "Right away, o captain, my captain."
+    "Pietro" "And for you?"
+
+### TODO format later
+# Another [latte_flavor] latte, please.
+# A plain latte, please. Just a normal one.
+# Nothing right now, thanks.
+
+hide Pietro barista
+with easeoutright
+
     j "The soul attracts that which it secretly harbours;"
     j "that which it loves, and also that which it fears;"
     j "it reaches the height of its cherished aspirations;"
