@@ -66,7 +66,8 @@ style player_window:
 # name of the character.
 
 default playername = "Youthful Reader"
-default player_appearance = "option_femme"
+# TODO create multiple player appearances, un-comment line below
+# default player_appearance = "option_femme"
 
 define j = Character("James",
     window_style="subtitle_window",
@@ -88,16 +89,19 @@ label start:
     $ preferences.afm_enable = True
     $ preferences.afm_time = 15
 
-    menu:
-        "When you look in the mirror, what do you see?"
-        "Masc":
-            $ player_appearance = "option_masc"
-        "Femme":
-            $ player_appearance = "option_femme"
-        "Ambiguous":
-            $ player_appearance = "option_ambiguous"
-        "I don't know and I don't care":
-            pass
+# TODO, create multiple player appearances, un-comment out section below
+
+#    menu:
+#        "When you look in the mirror, what do you see?"
+#        "Masc":
+#            $ player_appearance = "option_masc"
+#        "Femme":
+#            $ player_appearance = "option_femme"
+#        "Ambiguous":
+#            $ player_appearance = "option_ambiguous"
+#        "I don't know and I don't care":
+#            pass
+label choices0:
     menu:
         "Have you ever truly felt alive?"
         "Yes.":
@@ -151,16 +155,16 @@ $ tea_flavor = renpy.random.choice(['orange blossom',  'oolong', 'Amazigh herbal
 
 $ nice_city = renpy.random.choice(['Casablanca', 'Reno', 'Las Vegas', 'Lisbon', 'Bordeaux', 'Stockholm', 'Bruges', 'Granada', 'Toulouse', 'Lagos', 'Rio de Janeiro', 'Florianopolis', 'Belo Horizonte', 'Funchal', 'Pau', 'Dax', 'Perpignan', 'Aljustrel', 'Aljezur', 'Baixa da Banheira', 'Porto', 'Irvine', 'Chicago', 'Espinho', 'Cairo', 'Dar es Salaam', 'Umm al Khair', 'Tunis', 'Maputo', 'Rabat', 'Lahore', 'Islamabad', 'Beijing', 'Istanbul', 'Izmir', 'Ho Chi Minh City', 'Chennai', 'Quanzhou', 'Osaka', 'Almaty', 'Phnom Penh', 'Tblisi', 'Bucharest', 'Seixal', 'Samarkand', 'Isfahan', 'Rome', 'Paris', 'New York City', 'Newark'])
 
-$ male_regular_name = renpy.random.choice(['Jake',  'Ali', 'Mamoun', 'Tynan', 'Daniel', 'Azim', 'Mike', 'Josh', 'Matt', 'Chris', 'Ryan', 'Andrew', 'Noah', 'Ahson', 'Brandon', 'Dylan', 'Jesus', 'Mohammed', 'Kevin', 'Luis', 'Angel', 'Jayden', 'Aidan', 'Jorge', 'Ian', 'Diego', 'Cole', 'Jeremiah', 'Xavier', 'Miguel', 'Sebastian', 'Adam', 'Eli', 'Myron'])
+$ male_regular_name = renpy.random.choice(['Jake',  'Ali', 'Mamoun', 'Tynan', 'Daniel', 'Azim', 'Mike', 'Josh', 'Matt', 'Chris', 'Ryan', 'Andrew', 'Noah', 'Ahson', 'Brandon', 'Dylan', 'Jesus', 'Mohammed', 'Kevin', 'Luis', 'Angel', 'Jayden', 'Aidan', 'Jorge', 'Ian', 'Diego', 'Cole', 'Jeremiah', 'Xavier', 'Miguel', 'Sebastian', 'Adam', 'Eli', 'Myron', 'Stanton'])
 
-$ female_regular_name = renpy.random.choice(['Emma', 'Justine', 'Bridget', 'Miriam', 'Maryam', 'Ruth', 'Belle', 'June', 'Eve', 'Sam', 'Janis', 'Andrea', 'Esperanza', 'Hope', 'Cleo', 'Barbara', 'Wendy', 'Krystal', 'Sofia', 'Mathilde', 'Aisha', 'Kadijah', 'Anfisa', 'Irina', 'Kat', 'Lyudmila', 'Natalya'])
+$ female_regular_name = renpy.random.choice(['Emma', 'Justine', 'Bridget', 'Miriam', 'Maryam', 'Ruth', 'Belle', 'June', 'Eve', 'Sam', 'Janis', 'Andrea', 'Esperanza', 'Hope', 'Cleo', 'Barbara', 'Wendy', 'Krystal', 'Sofia', 'Mathilde', 'Aisha', 'Leila', 'Kadijah', 'Anfisa', 'Irina', 'Kat', 'Lyudmila', 'Natalya'])
 
 $ garden_plant = renpy.random.choice(['butterfly milkweed', 'honeysuckle', 'musk melon', 'amaranth', 'asparagus', 'Thai basil', 'ornamental cabbage', 'red coleus', 'columbine', 'dandelions', 'hollyhock', 'lemon thyme', 'lemongrass', 'mizuna', 'okra', 'weed'])
 
 ### end cafe variables
 
-    show james standing at center
-    with Fade(0.0, 0.0, 3.0)
+show james standing at center
+with Fade(0.0, 0.0, 3.0)
 
     "You know that none of this is real, but this cafe and this man seem so familiar..."
     "The man opens his mouth to speak."
@@ -206,12 +210,12 @@ label choices1_a:
     j "I cannot ask my Lily for further revision on my message. We have a great love for one another and she lacks a certain objectivity. You do not know me--although you now know quite a bit about me."
 
     $ knowsaboutjameslife = True
-    jump choices1_common
+        jump choices1_common
 
 label choices1_b:
     voice "audio/jamesaudio/james_7b.mp3"
     j "Very good. I shall then continue."
-    jump choices1_common
+        jump choices1_common
 
 label choices1_common:
     scene bg cafe
@@ -265,7 +269,7 @@ label choices1_common:
         voice "audio/jamesaudio/james_14a2.mp3"
         j "Very good."
         $ drinksrespectwomenjuice = True
-        jump choices2_common
+            jump choices2_common
 
     label choices2_b:
         voice "audio/jamesaudio/james_14b1.mp3"
@@ -281,7 +285,7 @@ label choices1_common:
         j "Well, then. Ha ha ha. I drown in mirth."
         voice "audio/jamesaudio/james_14b5.mp3"
         j "Let us now move on to graver matters, [playername]. Matters of import."
-        jump choices2_common
+            jump choices2_common
 
 label choices2_common:
     voice "audio/jamesaudio/james_15.mp3"
@@ -300,9 +304,9 @@ label choices2_common:
     voice "audio/jamesaudio/james_19.mp3"
     j "Much like my friend here, as a matter of fact. Pietro, please take the floor--you have such a way with words."
 
-    show pietro poet at center
-    with easeinright
-    pause(1.0)
+show pietro poet at center
+with easeinright
+pause(1.0)
 
 # TODO pietro the poet absolutely has to be wearing a beret and a green apron
 
@@ -337,8 +341,10 @@ label choices2_common:
     "Pietro" "Thank you, my good man. My colleague in wordsmithery. It was my pleasure to perform my poem."
     voice "audio/ppaudio/pp_12.mp3"
     "Pietro" "Fare thee well--both of you. My break has ended, and I must return to my post at the espresso machine..."
-    hide pietro poet
-    with easeoutright
+hide pietro poet
+with easeoutright
+
+label choices3:
     menu:
         "Wow, what a beautiful poem.":
             jump choices3_common
@@ -350,6 +356,7 @@ label choices3_common:
     j "Indeed."
     voice "audio/jamesaudio/james_24.mp3"
     j "Before I continue, [playername], I think I would like to whet my beak. Would you care for anything to drink?"
+label choices4:
     menu:
         "Yes, please.":
             jump choices4_a
@@ -361,24 +368,25 @@ label choices4_a:
     voice "audio/jamesaudio/james_24a1.mp3"
     j "I shall order my favorite item on the menu for you."
 
-    hide james sitting
-    with None
-    show james standing
-    with None
-    pause(2.0)
-    hide james standing
-    with easeoutright
-    pause(4.0)
-    show james standing
-    with easeinright
+hide james sitting
+with None
+show james standing
+with None
+pause(2.0)
+hide james standing
+with easeoutright
+pause(4.0)
+show james standing
+with easeinright
+
     voice "audio/jamesaudio/james_24a2.mp3"
     j "Our dear friend, the poet, is currently preparing a very special [latte_flavor] latte for each one of us. I hope you shall find it as delectable as I myself do."
     u "I think I'm more interested in what you have to say, but I'm excited to try your favorite drink!"
     voice "audio/jamesaudio/james_24a3.mp3"
     j "Such an eager student! I will then continue. Ahem!"
-    jump choices4_common
+        jump choices4_common
 
-label choices4_b
+label choices4_b:
     voice "audio/jamesaudio/james_24b1.mp3"
     j "Nonsense! I will put in the order and return with haste."
 
@@ -399,7 +407,7 @@ label choices4_b
     j "Generosity is a joy for the giver, [playername]. Indeed, I have you to thank."
     u "It'll be fun to try something new."
     u "Speaking of something new... what were you saying?"
-    jump choices4_common
+        jump choices4_common
 
 label choices4_common:
     voice "audio/jamesaudio/james_25.mp3"
@@ -457,6 +465,7 @@ label choices4_common:
     j "Always." 
     voice "audio/jamesaudio/james_47.mp3"
     j "[playername], do you often feel powerless?"
+label choices5:
     menu:
     "Yeah."
         jump choices5_a
@@ -472,7 +481,7 @@ label choices5_a:
     voice "audio/jamesaudio/james_47a2.mp3"
     j "And it happens often?"
     u "Yeah. It does."
-    jump choices 5_common
+        jump choices5_common
 
 label choices5_b:
     voice "audio/jamesaudio/james_b1.mp3"
@@ -484,17 +493,17 @@ label choices5_b:
     j "Though I am certain he will sound familiar to you. You will surely have met him."
     voice "audio/jamesaudio/james_47b4.mp3"
     j "Ahem."
-    jump choices 5_common
+        jump choices5_common
 
-label choices 5_c:
+label choices5_c:
     voice "audio/jamesaudio/james_47c1.mp3"
-    j "Fair enough, dear [playername].
+    j "Fair enough, dear [playername]."
     u "And don't call me 'dear'. We don't know each other like that."
     voice "audio/jamesaudio/james_47c2.mp3"
     j "It is a manner of speaking; I hope you will forgive it. To continue:"
-    jump choices 5_common
+        jump choices5_common
 
-label choices 5_common:
+label choices5_common:
     voice "audio/jamesaudio/james_48.mp3"
     j "Man is always the master, even in his weaker and most abandoned state;"
     voice "audio/jamesaudio/james_49.mp3"
@@ -558,7 +567,7 @@ label choices_6a:
     "Pietro" "It is my calling, and my duty, to make the greatest [latte_flavor] latte in this forsaken world!"
     u "Um... yeah!"
     u "I guess the world could always use more [latte_flavor] lattes. And love and peace, I suppose."
-    jump choices6_common
+        jump choices6_common
 
 label choices_6b:
     j "Life is not so long. I caution against over-indulgence in the pleasures of the flesh--but you must, too, take your pleasures in life."
@@ -569,7 +578,7 @@ label choices_6b:
     j "If I may indulge a bit more than is typical of me..."
     u "Yeah, you can have mine."
     j "I give you my appreciation."
-    jump choices6_common
+        jump choices6_common
 
 label choices6_common:
     u "James, did I miss anything else while I was gone?"
@@ -611,7 +620,7 @@ label choices7:
         "I'm not sure...":
             pass
 
-label choices:7_common
+label choices7_common:
     j "I know that you will."
     j "Let us now speak of the effect of thought on circumstances."
     j "[playername], do you garden?"
@@ -629,17 +638,32 @@ label choices:7_common
     j "so may a man tend the garden of his mind."
     j "Or any person."
 
-label choices7:
+label choices8:
     menu:
         "Not just a man.":
-        $ drinksrespectwomenjuice = True
+            $ drinksrespectwomenjuice = True
+            jump choices8_a
+        "Yeah, I know, that's what you said."
+            $ drinksrespectwomenjuice = False
+            jump choices8_b
+
+    label choices8_a:
         j "That's right."
         j "And they may weed out all the wrong, useless, and impure thoughts in their mind, cultivating toward perfection the flowers and fruits of right, useful, and pure thoughts."
             pass
         "Sure, yeah, whatever. I mean, that's implied.":
         "Tending his garden, a man must weed out all the wrong, useless, and impure thoughts in his mind, cultivating toward perfection the flowers and fruits of right, useful, and pure thoughts."
-            pass
+            jump choices8_common
 
+    label choices8_b:
+        j "I suppose I did. I have been making an attempt to adjust my language, however. I would hate for any youthful readers of my book to feel excluded from its message."
+        u "You're fine, don't worry about it."
+        j "Thank you."
+        j "So, a man may tend the garden of his mind, weeding out all of the wrong, useless, and impure thoughts in it."
+        j "He may--indeed, he must--cultivate toward perfection the flowers and fruits of right, useful, and pure thoughts."
+            jump choices8_common:
+
+label choices8_common:
     j "By pursuing this process, the gardener sooner or later discovers that he is the master-gardener of his soul and the director of his life."
     j "He also reveals, within himself, the laws of thought,"
     j "and understands, with ever-increasing accuracy,"
@@ -697,10 +721,18 @@ with easeinright
     "Pietro" "Right away, o captain, my captain."
     "Pietro" "And for you?"
 
-### TODO format later
-# Another [latte_flavor] latte, please.
-# A plain latte, please. Just a normal one.
-# Nothing right now, thanks.
+label choices9:
+    menu:
+        "Another [latte_flavor] latte, please."
+            $ gourmand = true
+            jump choices9_common
+        "A plain latte, please. Just a normal one."
+            $ gourmand = false
+            jump choices9_common
+        "Nothing right now, thanks."
+            jump choices9_common
+
+label choices9_common:
 
 hide Pietro barista
 with easeoutright
@@ -709,20 +741,74 @@ with easeoutright
     j "that which it loves, and also that which it fears;"
     j "it reaches the height of its cherished aspirations;"
     j "it falls to the level of its unchastened desires,—and circumstances are the means by which the soul receives its own."
-    j "Every thought-seed sown or allowed to fall into the mind,"
-    j "and to take root there,"
-    j "produces its own,"
-    j "blossoming sooner or later into act, and bearing its own fruitage of opportunity and circumstance."
-    j "Good thoughts bear good fruit, bad thoughts bad fruit."
-    j "The outer world of circumstance shapes itself to the inner world of thought, and both pleasant and unpleasant external conditions are factors,"
-    j "which make for the ultimate good of the individual."
+    j "Every thought-seed sown or allowed to fall into the mind, "and to take root there, produces its own."
+    u "Its own what?"
+    j "Its own fruit."
+    j "Sooner or later, it blossoms into act, and bears its own fruitage of opportunity and circumstance."
+    u "Let me guess--"
+    j "Good thoughts bear good fruit."
+    u "Bad thoughts bad fruit."
+    j "That is correct, [playername]."
+    j "The outer world of circumstance shapes itself to the inner world of thought, and both pleasant and unpleasant external conditions are factors."
+    j "This makes for the ultimate good of the individual."
+
+    [female_regular_name] "Bonjour!"
+    j "Bonjour, my lady."
+    "Pietro" "Sorry, James! I'm making her drink first!"
+    j "The order in which you craft these fine drinks is of no import to me, my good man."
+    j "Now, what was I saying?"
+
+label choices10:
+    menu:
+        "Is that [female_regular_name]? The one who's supposed to be in [nice_city] with that guy you mentioned?"
+            jump choices10_a
+        "You were talking about how we reap what we sow."
+            jump choices10_b
+
+label choices10_a:
+    j "Indeed it is..."
+    u "Do you think something happened?"
+    j "Such as?"
+    u "They broke up? It didn't work out?"
+    j "Hmm..."
+    u "By the way, James--"
+    j "Yes?"
+    u "Is there anything about gossip in your book?"
+    j "Oh, you miscreant. Very well. I shall get on with my lecture."
+    u "Chismoso."
+    j "I'm not familiar with the word, but I understand by your tone and the context that it is not positive. And, indeed, I was a bit hypocritical just there."
+    u "Keep going, James. I'm all ears."
+    jump choices 10_common
+
+label choices10_b:
+    j "Indeed I was. Thank you. Ahem."
+    jump choices10_common
+
+label choices10_common:
     j "As the reaper of his own harvest, man learns both by suffering and bliss."
-    j "Following the inmost desires, aspirations, thoughts, by which he allows himself to be dominated,"
-    j "--pursuing the will-o'-the-wisps of impure imaginings or steadfastly walking the highway of strong and high endeavour--"
-    j "a man at last arrives at their fruition and fulfilment in the outer conditions of his life."
-    j "The laws of growth and adjustment everywhere obtains."
-    j "A man does not come to the almshouse or the jail by the tyranny of fate or circumstance."
+    j "He allows himself to be dominated into following a path laid out by his inmost desires, aspirations, and thoughts."
+    j "He may be pursuing the will-o'-the-wisps of impure imaginings, or he may be steadfastly walking the highway of strong and high endeavour."
+    j "As for me, I hope it is the latter..."
+
+label choices11:
+    menu:
+        "I think it is. I think you're walking the highway of high endeavors."
+            jump choices11_common
+        "I think you're a hypocrite.
+            jump choices11_common
+label choices11_common:
+    j "Perhaps..."
+    u "Perhaps."
+    j "Well, [playername], eventually a man at last arrives at fruition and fulfilment in the outer conditions of his life."
+    j "The laws of growth and adjustment everywhere obtains. A man does not come to the almshouse or the jail by the tyranny of fate or circumstance."
+
+label choices12:
     u "I don't agree with that."
+        jump choices12_a
+    u "That's true."
+        jump choices12_b
+
+label choices12_a:
     j "You may disagree. That is fine, of course you may."
     j "I believe that a man finds himself in these places by the pathway of grovelling thoughts and base desires."
     j "A pure-minded man does not fall suddenly into crime by stress of any mere external force;"
@@ -731,16 +817,33 @@ with easeoutright
     j "This is my philosophy. You may write your own."
     u "I will."
     j "I anticipate reading it. I believe that the philosophies of life are the greatest thing we may put our minds to."
+        jump choices12_common:
+
+label choices12_b:
+    j "I believe that a man finds himself in these places by the pathway of grovelling thoughts and base desires."
+    j "A pure-minded man does not fall suddenly into crime by stress of any mere external force;"
+    j "the criminal thought had long been secretly fostered in the heart, and the hour of opportunity revealed its gathered power."
+    u "One hundred percent. I couldn't agree more."
+    j "[playername], have you considered writing a book about your life philosophy?"
+    u "Not, like, in a serious way. Should I""
+    j "I believe that the philosophies of life are the greatest thing we may put our minds to."
+        jump choices12_common
+
+label choices12_common:
     j "I sometimes fear that your generation does not value this science--"
     u "Writing is an art."
     j "Philosophy is an art and a science."
     j "In any case, I encourage you to put your thoughts to paper, or canvas, or perhaps the digital realm that we find ourselves in now."
-    u "I will."
+    u "I promise I will."
     j "Good."
     u "So... you were saying?"
     j "Indeed. Ahem."
     j "Circumstance does not make the man; it reveals him to himself."
-    j "No such conditions can exist as descending into vice and its attendant sufferings apart from vicious inclinations,"
+
+
+# stopped work here 15 June 2026
+
+    j "No such conditions can exist as descending into vice and its attendant sufferings apart from vicious inclinations."
     j "or ascending into virtue and its pure happiness without the continued cultivation of virtuous aspirations;"
     j "and man, therefore, as the lord and master of thought, is the maker of himself the shaper and author of environment."
     j "Even at birth the soul comes to its own,"
